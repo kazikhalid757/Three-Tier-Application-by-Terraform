@@ -27,10 +27,6 @@ variable "instance_type" {
   default     = "t3.micro"
 }
 
-variable "user_data" {
-  description = "User data script for EC2 instances"
-  type        = string
-}
 variable "db_user" {
   description = "Database username"
   type        = string

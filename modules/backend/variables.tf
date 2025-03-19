@@ -1,6 +1,5 @@
 variable "instance_type" {}
 variable "subnet_id" {}
-variable "user_data" {}
 
 variable "vpc_id" {
   description = "VPC ID where the backend instance will be created"
