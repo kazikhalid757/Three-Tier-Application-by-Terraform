@@ -3,7 +3,7 @@ resource "aws_instance" "backend" {
   instance_type   = var.instance_type
   subnet_id       = var.private_subnet_id
   vpc_security_group_ids = [aws_security_group.backend_sg.id]
-    user_data = templatefile("${path.module}/backend_setup.sh", {
+    user_data = templatefile("${path.module}/user_data.sh", {
     db_host     = var.db_host
     db_user     = var.db_user
     db_name     = var.db_name
