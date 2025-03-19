@@ -6,27 +6,37 @@ module "vpc" {
 }
 
 module "frontend" {
-  source         = "./modules/ec2"
-  vpc_id        = module.vpc.vpc_id
-  subnet_id     = module.vpc.public_subnet_id
-  instance_type = var.instance_type
-  github_ssh_key = var.github_ssh_key
-  user_data     = file("user_data_frontend.sh")
+  source          = "./modules/frontend"
+  instance_type   = var.instance_type
+  vpc_id          = module.vpc.vpc_id
+  public_subnet_id = module.vpc.public_subnet_id
+  subnet_id       = module.vpc.public_subnet_id
+  user_data       = var.user_data
 }
 
 module "backend" {
-  source         = "./modules/ec2"
-  vpc_id        = module.vpc.vpc_id
-  subnet_id     = module.vpc.private_subnet_id
-  instance_type = var.instance_type
-  github_ssh_key = var.github_ssh_key
-  user_data     = file("user_data_backend.sh")
+  source          = "./modules/backend"
+  instance_type   = var.instance_type
+  vpc_id          = module.vpc.vpc_id
+  private_subnet_id = module.vpc.private_subnet_id
+  subnet_id       = module.vpc.private_subnet_id
+  user_data       = var.user_data
+  frontend_sg_id  = module.frontend.frontend_sg_id
+  rds_sg_id       = module.rds.rds_sg_id
+  db_host         = module.rds.db_endpoint
+  db_user         = var.db_user
+  db_password     = var.db_password
+  db_name         = var.db_name
 }
 
 module "rds" {
-  source       = "./modules/rds"
-  vpc_id       = module.vpc.vpc_id
-  subnet_id    = module.vpc.private_subnet_id
-  db_username  = var.db_username
-  db_password  = var.db_password
+  source          = "./modules/rds"
+  vpc_id          = module.vpc.vpc_id
+  private_subnet_id = module.vpc.private_subnet_id
+  private_subnet_ids = [module.vpc.private_subnet_id]
+  backend_sg_id   = module.backend.backend_sg_id
+  db_user         = var.db_user
+  db_password     = var.db_password
+  db_name         = var.db_name
 }
+

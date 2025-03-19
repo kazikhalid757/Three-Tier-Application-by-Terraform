@@ -4,36 +4,46 @@ variable "aws_region" {
 }
 
 variable "vpc_cidr" {
-  description = "VPC CIDR Block"
+  description = "CIDR block for VPC"
+  type        = string
   default     = "10.0.0.0/16"
 }
 
 variable "public_subnet_cidr" {
-  description = "Public subnet CIDR"
+  description = "CIDR block for public subnet"
+  type        = string
   default     = "10.0.1.0/24"
 }
 
 variable "private_subnet_cidr" {
-  description = "Private subnet CIDR"
+  description = "CIDR block for private subnet"
+  type        = string
   default     = "10.0.2.0/24"
 }
 
 variable "instance_type" {
   description = "EC2 instance type"
-  default     = "t2.micro"
+  type        = string
+  default     = "t3.micro"
 }
 
-variable "github_ssh_key" {
-  description = "SSH private key for GitHub access"
-  sensitive   = true
+variable "user_data" {
+  description = "User data script for EC2 instances"
+  type        = string
 }
 
-variable "db_username" {
+variable "db_user" {
   description = "Database username"
-  sensitive   = true
+  type        = string
 }
 
 variable "db_password" {
   description = "Database password"
+  type        = string
   sensitive   = true
+}
+
+variable "db_name" {
+  description = "Name of the database"
+  type        = string
 }
