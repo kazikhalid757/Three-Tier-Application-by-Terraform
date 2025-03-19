@@ -31,7 +31,6 @@ variable "user_data" {
   description = "User data script for EC2 instances"
   type        = string
 }
-
 variable "db_user" {
   description = "Database username"
   type        = string
@@ -41,9 +40,11 @@ variable "db_password" {
   description = "Database password"
   type        = string
   sensitive   = true
+  default     = "kazi12345@#K"
 }
 
 variable "db_name" {
   description = "Name of the database"
   type        = string
+  default     = "postgres"
 }
