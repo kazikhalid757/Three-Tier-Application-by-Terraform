@@ -1,5 +1,5 @@
 resource "aws_instance" "backend" {
-  ami             = "ami-04b4f1a9cf54c11d0"  # Ubuntu 22.04 LTS in us-east-1
+  ami             = "ami-08b5b3a93ed654d19"  
   instance_type   = var.instance_type
   subnet_id       = var.private_subnet_id
   vpc_security_group_ids = [aws_security_group.backend_sg.id]

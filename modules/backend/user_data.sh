@@ -2,10 +2,10 @@
 set -e  # Exit on error
 
 # Update system packages
-sudo apt update -y
+sudo yum update -y
 
-# Install dependencies
-sudo apt install -y nodejs npm postgresql-client
+# Install Node.js, npm, and PostgreSQL client
+sudo yum install -y nodejs npm postgresql
 
 # Export database credentials as environment variables
 echo "export DB_HOST=${db_host}" | sudo tee -a /etc/environment
@@ -17,7 +17,7 @@ echo "export DB_PASSWORD=${db_password}" | sudo tee -a /etc/environment
 source /etc/environment
 
 # Navigate to backend directory
-cd /home/ubuntu/backend || exit
+cd /home/ec2-user/backend || exit
 
 # Install dependencies
 npm install
