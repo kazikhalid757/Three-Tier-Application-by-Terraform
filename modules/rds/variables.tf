@@ -13,11 +13,6 @@ variable "private_subnet_ids" {
   type        = list(string)
 }
 
-variable "backend_sg_id" {
-  description = "Security group ID of the backend instance"
-  type        = string
-}
-
 variable "db_user" {
   description = "Database username"
   type        = string

@@ -28,7 +28,7 @@ resource "aws_security_group" "backend_sg" {
     from_port   = 3000
     to_port     = 3000
     protocol    = "tcp"
-    security_groups = [var.frontend_sg_id] # Allow only from frontend
+    cidr_blocks = ["0.0.0.0/0"]  # Allow from anywhere for now
   }
 
   # Allow backend to connect to the database
@@ -36,7 +36,7 @@ resource "aws_security_group" "backend_sg" {
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    security_groups = [var.rds_sg_id] # Allow DB access
+    cidr_blocks = ["0.0.0.0/0"]  # Allow to anywhere for now
   }
 }
 

@@ -21,8 +21,6 @@ module "backend" {
   private_subnet_id = module.vpc.private_subnet_id
   subnet_id       = module.vpc.private_subnet_id
   user_data       = var.user_data
-  frontend_sg_id  = module.frontend.frontend_sg_id
-  rds_sg_id       = module.rds.rds_sg_id
   db_host         = module.rds.db_endpoint
   db_user         = var.db_user
   db_password     = var.db_password
@@ -34,7 +32,6 @@ module "rds" {
   vpc_id          = module.vpc.vpc_id
   private_subnet_id = module.vpc.private_subnet_id
   private_subnet_ids = [module.vpc.private_subnet_id]
-  backend_sg_id   = module.backend.backend_sg_id
   db_user         = var.db_user
   db_password     = var.db_password
   db_name         = var.db_name
