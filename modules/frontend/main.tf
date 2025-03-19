@@ -4,12 +4,11 @@ resource "aws_instance" "frontend" {
   subnet_id       = var.public_subnet_id
   vpc_security_group_ids = [aws_security_group.frontend_sg.id]
 
-  user_data = <<-EOF
-              #!/bin/bash
-              sudo apt update -y
-              sudo apt install -y nginx
-              systemctl start nginx
-              EOF
+  user_data = file("${path.module}/user_data.sh")
+
+   tags = {
+    Name = "Frontend-Server"
+  }
 }
 
 resource "aws_security_group" "frontend_sg" {

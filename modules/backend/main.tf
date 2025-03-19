@@ -3,22 +3,18 @@ resource "aws_instance" "backend" {
   instance_type   = var.instance_type
   subnet_id       = var.private_subnet_id
   vpc_security_group_ids = [aws_security_group.backend_sg.id]
-  user_data = <<-EOF
-              #!/bin/bash
-              sudo apt update -y
-              sudo apt install -y nodejs npm postgresql-client
-              
-              echo "DB_HOST=${var.db_host}" | sudo tee -a /etc/environment
-              echo "DB_USER=${var.db_user}" | sudo tee -a /etc/environment
-              echo "DB_NAME=${var.db_name}" | sudo tee -a /etc/environment
-              echo "DB_PASSWORD=${var.db_password}" | sudo tee -a /etc/environment
-              
-              source /etc/environment
-              cd /home/ubuntu/backend
-              npm install
-              nohup npm start > backend.log 2>&1 &
-              EOF
+    user_data = templatefile("${path.module}/backend_setup.sh", {
+    db_host     = var.db_host
+    db_user     = var.db_user
+    db_name     = var.db_name
+    db_password = var.db_password
+  })
+
+  tags = {
+    Name = "Backend-Server"
+  }
 }
+
 
 resource "aws_security_group" "backend_sg" {
   vpc_id = var.vpc_id
