@@ -78,6 +78,16 @@ resource "aws_subnet" "private" {
   }
 }
 
+resource "aws_subnet" "private_2" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.3.0/24"  # Different CIDR for second subnet
+  availability_zone = "us-east-1b"
+
+  tags = {
+    Name = "private-2"
+  }
+}
+
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
