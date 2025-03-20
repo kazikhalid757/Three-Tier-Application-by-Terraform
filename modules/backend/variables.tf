@@ -31,3 +31,8 @@ variable "db_password" {
   type        = string
   sensitive   = true
 }
+
+variable "frontend_sg_id" {
+  description = "Security group ID of the frontend instance"
+  type        = string
+}

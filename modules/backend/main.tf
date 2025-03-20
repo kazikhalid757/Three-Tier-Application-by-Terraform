@@ -21,18 +21,18 @@ resource "aws_security_group" "backend_sg" {
 
   # Allow API requests from frontend
   ingress {
-    from_port   = 3000
-    to_port     = 3000
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # Allow from anywhere for now
+    from_port       = 3000
+    to_port         = 3000
+    protocol        = "tcp"
+    security_groups = [var.frontend_sg_id]
   }
 
-  # Allow backend to connect to the database
+  # Allow all outbound traffic
   egress {
-    from_port   = 5432
-    to_port     = 5432
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # Allow to anywhere for now
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 

@@ -29,10 +29,17 @@ module "frontend" {
 module "rds" {
   source          = "./modules/rds"
   vpc_id          = module.vpc.vpc_id
-  private_subnet_ids = [module.vpc.private_subnet_id, module.vpc.private_subnet_id_2]
+  private_subnet_ids = [module.vpc.private_subnet_id_2]
   db_user         = var.db_user
   db_password     = var.db_password
   db_name         = var.db_name
   backend_sg_id   = module.backend.backend_sg_id
+}
+
+module "alb" {
+  source            = "./modules/alb"
+  vpc_id            = module.vpc.vpc_id
+  public_subnet_ids = [module.vpc.public_subnet_id]
+  frontend_instance_id = module.frontend.frontend_instance_id
 }
 

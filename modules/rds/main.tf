@@ -20,7 +20,7 @@ ingress {
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    security_groups = [var.backend_sg_id]  # Pass backend security group ID from variables
+    security_groups = [var.backend_sg_id] 
   }
 
   # Allow the database to respond to requests

@@ -4,17 +4,19 @@ variable "vpc_id" {
 }
 
 variable "public_subnet_id" {
-  description = "Public subnet ID for the frontend instance"
+  description = "Public subnet ID where the frontend instance will be created"
   type        = string
 }
 
 variable "instance_type" {
   description = "EC2 instance type"
   type        = string
-  default     = "t2.micro"
 }
 
-variable "subnet_id" {}
+variable "subnet_id" {
+  description = "Subnet ID where the frontend instance will be created"
+  type        = string
+}
 
 variable "backend_private_ip" {
   description = "Private IP of the backend instance"
