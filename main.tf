@@ -5,15 +5,6 @@ module "vpc" {
   private_subnet_cidr = var.private_subnet_cidr
 }
 
-module "frontend" {
-  source          = "./modules/frontend"
-  instance_type   = var.instance_type
-  vpc_id          = module.vpc.vpc_id
-  public_subnet_id = module.vpc.public_subnet_id
-  subnet_id       = module.vpc.public_subnet_id
-  backend_private_ip = module.backend.backend_private_ip
-}
-
 module "backend" {
   source          = "./modules/backend"
   instance_type   = var.instance_type
@@ -24,6 +15,15 @@ module "backend" {
   db_user         = var.db_user
   db_password     = var.db_password
   db_name         = var.db_name
+}
+
+module "frontend" {
+  source          = "./modules/frontend"
+  instance_type   = var.instance_type
+  vpc_id          = module.vpc.vpc_id
+  public_subnet_id = module.vpc.public_subnet_id
+  subnet_id       = module.vpc.public_subnet_id
+  backend_private_ip = module.backend.backend_private_ip
 }
 
 module "rds" {
