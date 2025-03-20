@@ -35,5 +35,4 @@ ingress {
 resource "aws_db_subnet_group" "db_subnet_group" {
   name       = "my-db-subnet-group"
   subnet_ids = var.private_subnet_ids
-  vpc_id     = var.vpc_id
 }
