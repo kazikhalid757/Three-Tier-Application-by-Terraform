@@ -1,27 +1,27 @@
 #!/bin/bash
 
 # Update package list
-sudo apt-get update -y
+sudo yum update -y
 
 # Install Node.js and npm
-curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-sudo apt-get install -y nodejs
+curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
+sudo yum install -y nodejs
 
 # Install PostgreSQL client
-sudo apt-get install -y postgresql-client
+sudo yum install -y postgresql
 
 # Create application directory
-sudo mkdir -p /home/ubuntu/backend
-sudo chown -R ubuntu:ubuntu /home/ubuntu/backend
+sudo mkdir -p /home/ec2-user/backend
+sudo chown -R ec2-user:ec2-user /home/ec2-user/backend
 
 # Set environment variables
-echo "export DB_HOST=${db_host}" >> /home/ubuntu/.bashrc
-echo "export DB_USER=${db_user}" >> /home/ubuntu/.bashrc
-echo "export DB_NAME=${db_name}" >> /home/ubuntu/.bashrc
-echo "export DB_PASSWORD=${db_password}" >> /home/ubuntu/.bashrc
+echo "export DB_HOST=${db_host}" >> /home/ec2-user/.bashrc
+echo "export DB_USER=${db_user}" >> /home/ec2-user/.bashrc
+echo "export DB_NAME=${db_name}" >> /home/ec2-user/.bashrc
+echo "export DB_PASSWORD=${db_password}" >> /home/ec2-user/.bashrc
 
 # Create a simple Express.js application
-cat > /home/ubuntu/backend/package.json << EOF
+cat > /home/ec2-user/backend/package.json << EOF
 {
   "name": "backend",
   "version": "1.0.0",
@@ -36,7 +36,7 @@ cat > /home/ubuntu/backend/package.json << EOF
 }
 EOF
 
-cat > /home/ubuntu/backend/index.js << EOF
+cat > /home/ec2-user/backend/index.js << EOF
 const express = require('express');
 const { Pool } = require('pg');
 const app = express();
@@ -69,7 +69,7 @@ app.listen(3000, '0.0.0.0', () => {
 EOF
 
 # Install dependencies and start the application
-cd /home/ubuntu/backend
+cd /home/ec2-user/backend
 npm install
 nohup npm start > backend.log 2>&1 &
 
@@ -81,8 +81,8 @@ After=network.target
 
 [Service]
 Type=simple
-User=ubuntu
-WorkingDirectory=/home/ubuntu/backend
+User=ec2-user
+WorkingDirectory=/home/ec2-user/backend
 Environment=DB_HOST=${db_host}
 Environment=DB_USER=${db_user}
 Environment=DB_NAME=${db_name}

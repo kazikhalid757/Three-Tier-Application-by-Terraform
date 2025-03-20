@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Update package list
-sudo apt-get update -y
+sudo yum update -y
 
 # Install Nginx
-sudo apt-get install -y nginx
+sudo yum install -y nginx
 
 # Start Nginx service
 sudo systemctl start nginx
@@ -13,13 +13,13 @@ sudo systemctl start nginx
 sudo systemctl enable nginx
 
 # Create Nginx configuration for the frontend
-sudo tee /etc/nginx/sites-available/default << EOF
+sudo tee /etc/nginx/conf.d/backend_proxy.conf << EOF
 server {
     listen 80;
     server_name _;
 
     location / {
-        proxy_pass ${backend_url};
+        proxy_pass ${backend_url};  # Proxy to the backend URL provided
         proxy_http_version 1.1;
         proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection 'upgrade';
