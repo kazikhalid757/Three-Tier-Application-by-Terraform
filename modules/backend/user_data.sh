@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Update package list
+# Update system packages
 sudo yum update -y
 
 # Install Node.js and npm
@@ -19,6 +19,10 @@ echo "export DB_HOST=${db_host}" >> /home/ec2-user/.bashrc
 echo "export DB_USER=${db_user}" >> /home/ec2-user/.bashrc
 echo "export DB_NAME=${db_name}" >> /home/ec2-user/.bashrc
 echo "export DB_PASSWORD=${db_password}" >> /home/ec2-user/.bashrc
+source /home/ec2-user/.bashrc  # Load variables
+
+# Manual check: Can EC2 reach RDS?
+psql -h ${db_host} -U ${db_user} -d ${db_name} -c "SELECT NOW();" || echo "DB connection failed!"
 
 # Create a simple Express.js application
 cat > /home/ec2-user/backend/package.json << EOF
@@ -36,6 +40,7 @@ cat > /home/ec2-user/backend/package.json << EOF
 }
 EOF
 
+# Create Express.js app
 cat > /home/ec2-user/backend/index.js << EOF
 const express = require('express');
 const { Pool } = require('pg');
@@ -53,14 +58,14 @@ app.get('/', (req, res) => {
   res.json({ message: 'Backend is running!' });
 });
 
-app.get('/health', (req, res) => {
-  pool.query('SELECT NOW()', (err, result) => {
-    if (err) {
-      res.status(500).json({ error: 'Database connection failed' });
-      return;
-    }
+app.get('/health', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT NOW()');
     res.json({ status: 'healthy', timestamp: result.rows[0].now });
-  });
+  } catch (err) {
+    console.error("Database connection failed!", err);
+    res.status(500).json({ error: 'Database connection failed' });
+  }
 });
 
 app.listen(3000, '0.0.0.0', () => {
@@ -68,10 +73,9 @@ app.listen(3000, '0.0.0.0', () => {
 });
 EOF
 
-# Install dependencies and start the application
+# Install dependencies
 cd /home/ec2-user/backend
 npm install
-nohup npm start > backend.log 2>&1 &
 
 # Create a systemd service for the backend
 sudo tee /etc/systemd/system/backend.service << EOF
@@ -87,7 +91,7 @@ Environment=DB_HOST=${db_host}
 Environment=DB_USER=${db_user}
 Environment=DB_NAME=${db_name}
 Environment=DB_PASSWORD=${db_password}
-ExecStart=/usr/bin/npm start
+ExecStart=/usr/bin/node /home/ec2-user/backend/index.js
 Restart=always
 
 [Install]
@@ -98,3 +102,6 @@ EOF
 sudo systemctl daemon-reload
 sudo systemctl start backend
 sudo systemctl enable backend
+
+# Check if backend is running
+sudo journalctl -u backend --no-pager --lines=50

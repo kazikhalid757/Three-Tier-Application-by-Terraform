@@ -19,7 +19,7 @@ server {
     server_name _;
 
     location / {
-        proxy_pass ${backend_url};  # Proxy to the backend URL provided
+        proxy_pass ${backend_url};
         proxy_http_version 1.1;
         proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection 'upgrade';
