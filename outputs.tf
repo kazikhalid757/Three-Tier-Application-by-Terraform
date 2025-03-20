@@ -9,3 +9,7 @@ output "backend_ip" {
 output "database_endpoint" {
   value = module.rds.db_endpoint
 }
+
+output "database_endpoint" {
+  value = module.alb.alb_dns_name
+}
