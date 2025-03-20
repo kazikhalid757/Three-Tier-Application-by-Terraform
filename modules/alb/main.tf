@@ -1,15 +1,17 @@
-resource "aws_lb" "app_lb" {
-  name               = "app-lb"
+# Create Application Load Balancer for Frontend
+resource "aws_lb" "frontend_alb" {
+  name               = "frontend-alb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.alb_sg.id]
-  subnets           = var.public_subnet_ids
+  security_groups    = [aws_security_group.frontend_alb_sg.id]
+  subnets            = var.public_subnet_ids
 
   tags = {
-    Name = "app-lb"
+    Name = "frontend-alb"
   }
 }
 
+# Target Group for Frontend
 resource "aws_lb_target_group" "frontend_tg" {
   name     = "frontend-tg"
   port     = 80
@@ -32,8 +34,9 @@ resource "aws_lb_target_group" "frontend_tg" {
   }
 }
 
+# Listener for Frontend ALB
 resource "aws_lb_listener" "frontend_listener" {
-  load_balancer_arn = aws_lb.app_lb.arn
+  load_balancer_arn = aws_lb.frontend_alb.arn
   port              = 80
   protocol          = "HTTP"
 
@@ -43,18 +46,27 @@ resource "aws_lb_listener" "frontend_listener" {
   }
 }
 
+# Attach Frontend to Target Group
 resource "aws_lb_target_group_attachment" "frontend_attachment" {
   target_group_arn = aws_lb_target_group.frontend_tg.arn
   target_id        = var.frontend_instance_id
   port             = 80
 }
 
-resource "aws_security_group" "alb_sg" {
+# Security Group for Frontend ALB
+resource "aws_security_group" "frontend_alb_sg" {
   vpc_id = var.vpc_id
 
   ingress {
     from_port   = 80
     to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
