@@ -27,7 +27,7 @@ module "frontend" {
   public_subnet_id  = module.vpc.public_subnet_id
   subnet_id         = module.vpc.public_subnet_id
   backend_private_ip = module.backend.backend_private_ip
-  backend_alb_dns   = module.alb.alb_dns
+  
 }
 
 module "rds" {
