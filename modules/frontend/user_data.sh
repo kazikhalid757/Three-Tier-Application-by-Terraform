@@ -1,19 +1,33 @@
 #!/bin/bash
-set -e
 
-# Update packages
-sudo yum update -y
+# Update package list
+sudo apt-get update -y
 
 # Install Nginx
-sudo amazon-linux-extras enable nginx1
-sudo yum install -y nginx
+sudo apt-get install -y nginx
 
-# Start and enable Nginx on boot
+# Start Nginx service
 sudo systemctl start nginx
+
+# Enable Nginx to start on boot
 sudo systemctl enable nginx
 
-# Replace placeholder backend URL in frontend code
-sudo sed -i "s|BACKEND_URL|${backend_url}|g" /usr/share/nginx/html/index.html
+# Create Nginx configuration for the frontend
+sudo tee /etc/nginx/sites-available/default << EOF
+server {
+    listen 80;
+    server_name _;
+
+    location / {
+        proxy_pass ${backend_url};
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host \$host;
+        proxy_cache_bypass \$http_upgrade;
+    }
+}
+EOF
 
 # Restart Nginx to apply changes
 sudo systemctl restart nginx
