@@ -14,6 +14,7 @@ variable "private_subnet_id" {
 variable "db_host" {
   description = "Database host address"
   type        = string
+  
 }
 
 variable "db_user" {

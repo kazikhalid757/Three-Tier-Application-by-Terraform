@@ -4,7 +4,7 @@
 sudo yum update -y
 
 # Install Node.js and npm
-curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
+curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash - 
 sudo yum install -y nodejs
 
 # Install PostgreSQL client
@@ -13,16 +13,6 @@ sudo yum install -y postgresql
 # Create application directory
 sudo mkdir -p /home/ec2-user/backend
 sudo chown -R ec2-user:ec2-user /home/ec2-user/backend
-
-# Set environment variables
-echo "export DB_HOST=${db_host}" >> /home/ec2-user/.bashrc
-echo "export DB_USER=${db_user}" >> /home/ec2-user/.bashrc
-echo "export DB_NAME=${db_name}" >> /home/ec2-user/.bashrc
-echo "export DB_PASSWORD=${db_password}" >> /home/ec2-user/.bashrc
-source /home/ec2-user/.bashrc  # Load variables
-
-# Manual check: Can EC2 reach RDS?
-psql -h ${db_host} -U ${db_user} -d ${db_name} -c "SELECT NOW();" || echo "DB connection failed!"
 
 # Create a simple Express.js application
 cat > /home/ec2-user/backend/package.json << EOF
