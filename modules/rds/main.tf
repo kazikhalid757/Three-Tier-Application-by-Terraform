@@ -33,6 +33,10 @@ ingress {
 }
 
 resource "aws_db_subnet_group" "db_subnet_group" {
-  name       = "my-db-subnet-group"
+  name       = "my-db-subnet-group-${random_id.suffix.hex}"
   subnet_ids = var.private_subnet_ids
+}
+
+resource "random_id" "suffix" {
+  byte_length = 4
 }

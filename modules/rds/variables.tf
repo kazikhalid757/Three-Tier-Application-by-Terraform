@@ -3,11 +3,6 @@ variable "vpc_id" {
   type        = string
 }
 
-variable "private_subnet_id" {
-  description = "Private subnet ID for the RDS instance"
-  type        = string
-}
-
 variable "private_subnet_ids" {
   description = "List of private subnet IDs for RDS"
   type        = list(string)
