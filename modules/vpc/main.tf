@@ -19,6 +19,18 @@ resource "aws_subnet" "public" {
   }
 }
 
+# Create second public subnet
+resource "aws_subnet" "public_2" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = var.public_subnet_cidr_2
+  availability_zone       = "us-east-1b"
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "public-2"
+  }
+}
+
 resource "aws_subnet" "private" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = var.private_subnet_cidr
@@ -31,7 +43,7 @@ resource "aws_subnet" "private" {
 
 resource "aws_subnet" "private_2" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.3.0/24"  # Different CIDR for second subnet
+  cidr_block        = var.private_subnet_cidr_2
   availability_zone = "us-east-1b"
 
   tags = {
@@ -65,17 +77,7 @@ resource "aws_route_table_association" "public" {
   route_table_id = aws_route_table.public.id
 }
 
-# Create second public subnet
-resource "aws_subnet" "public_2" {
-  vpc_id                  = aws_vpc.main.id
-  cidr_block              = "10.0.2.0/24"
-  availability_zone       = "us-east-1b"
-  map_public_ip_on_launch = true
 
-  tags = {
-    Name = "public-2"
-  }
-}
 
 # Associate second public subnet with public route table
 resource "aws_route_table_association" "public_2" {
