@@ -5,6 +5,6 @@ private_subnet_cidr = "10.0.3.0/24"
 private_subnet_cidr_2 = "10.0.4.0/24"
 instance_type     = "t2.micro"
 db_user           = "tamim"
-db_password       = "kazi12345@#T"
+db_password       = "kazi12345HGDT"
 db_name           = "mydb"
 
