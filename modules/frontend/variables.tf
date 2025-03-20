@@ -16,3 +16,8 @@ variable "instance_type" {
 
 variable "subnet_id" {}
 
+variable "backend_private_ip" {
+  description = "Private IP of the backend instance"
+  type        = string
+}
+

@@ -11,6 +11,7 @@ module "frontend" {
   vpc_id          = module.vpc.vpc_id
   public_subnet_id = module.vpc.public_subnet_id
   subnet_id       = module.vpc.public_subnet_id
+  backend_private_ip = module.backend.backend_private_ip
 }
 
 module "backend" {

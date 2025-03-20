@@ -6,7 +6,7 @@ resource "aws_instance" "frontend" {
 
  
   user_data = templatefile("${path.module}/user_data.sh", {
-    backend_url = "http://${aws_instance.backend.private_ip}:3000"
+    backend_url = "http://${var.backend_private_ip}:3000"
   })
 
    tags = {
