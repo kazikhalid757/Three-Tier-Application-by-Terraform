@@ -33,5 +33,6 @@ module "rds" {
   db_user         = var.db_user
   db_password     = var.db_password
   db_name         = var.db_name
+  backend_sg_id   = module.backend.backend_sg_id
 }
 

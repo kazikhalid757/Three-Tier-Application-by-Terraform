@@ -4,7 +4,10 @@ resource "aws_instance" "frontend" {
   subnet_id       = var.public_subnet_id
   vpc_security_group_ids = [aws_security_group.frontend_sg.id]
 
-  user_data = file("${path.module}/user_data.sh")
+ 
+  user_data = templatefile("${path.module}/user_data.sh", {
+    backend_url = "http://${aws_instance.backend.private_ip}:3000"
+  })
 
    tags = {
     Name = "Frontend-Server"

@@ -28,3 +28,8 @@ variable "db_name" {
   description = "Name of the database to be created"
   type        = string
 }
+
+variable "backend_sg_id" {
+  description = "Security group ID of the backend instance"
+  type        = string
+}
